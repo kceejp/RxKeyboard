@@ -1,4 +1,4 @@
-osx_image: xcode12.3
+osx_image: xcode11.7
 language: objective-c
 sudo: required
 env:
@@ -6,9 +6,9 @@ env:
     - PROJECT="RxKeyboard.xcodeproj"
     - SCHEME="RxKeyboard-Package"
     - IOS_SDK="iphonesimulator"
-    - MACOS_SDK="macosx11.0"
-    - TVOS_SDK="appletvsimulator9.0"
-    - WATCHOS_SDK="watchsimulator3.0"
+    - MACOS_SDK="macosx10.15"
+    - TVOS_SDK="appletvsimulator13.4"
+    - WATCHOS_SDK="watchsimulator6.2"
     - FRAMEWORK="RxKeyboard"
   matrix:
     - SDK="$IOS_SDK"      TEST=0  SWIFT_VERSION=5.1 DESTINATION="platform=iOS Simulator,name=iPhone 8"
@@ -23,22 +23,22 @@ before_script:
 
 script:
   - if [ $TEST == 1 ]; then
-      xcodebuild clean SWIFT_VERSION=${SWIFT_VERSION} build test
-        -project "$PROJECT"
-        -scheme "$SCHEME"
-        -sdk "$SDK"
-        -destination "$DESTINATION"
-        -configuration Debug
-        -enableCodeCoverage YES
-        CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty -c;
+    xcodebuild clean SWIFT_VERSION=${SWIFT_VERSION} build test
+    -project "$PROJECT"
+    -scheme "$SCHEME"
+    -sdk "$SDK"
+    -destination "$DESTINATION"
+    -configuration Debug
+    -enableCodeCoverage YES
+    CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty -c;
     else
-      xcodebuild clean SWIFT_VERSION=${SWIFT_VERSION} build
-        -project "$PROJECT"
-        -scheme "$SCHEME"
-        -sdk "$SDK"
-        -destination "$DESTINATION"
-        -configuration Debug
-        CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty -c;
+    xcodebuild clean SWIFT_VERSION=${SWIFT_VERSION} build
+    -project "$PROJECT"
+    -scheme "$SCHEME"
+    -sdk "$SDK"
+    -destination "$DESTINATION"
+    -configuration Debug
+    CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty -c;
     fi
   - bundle exec pod repo update
   - bundle exec pod lib lint --swift-version=${SWIFT_VERSION} --verbose --allow-warnings --fail-fast
